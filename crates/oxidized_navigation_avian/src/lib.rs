@@ -1,4 +1,3 @@
-use parry3d::{bounding_volume::Aabb, shape::TypedShape};
 
 use oxidized_navigation::colliders::OxidizedCollider;
 
@@ -8,11 +7,11 @@ pub struct AvianCollider;
 impl OxidizedCollider for AvianCollider {
     type Component = avian3d::prelude::Collider;
 
-    fn oxidized_into_typed_shape(collider: &avian3d::prelude::Collider) -> TypedShape {
+    fn oxidized_into_typed_shape(collider: &avian3d::prelude::Collider) -> parry3d::shape::TypedShape {
         collider.shape_scaled().as_typed_shape()
     }
 
-    fn oxidized_compute_local_aabb(collider: &avian3d::prelude::Collider) -> Aabb {
+    fn oxidized_compute_local_aabb(collider: &avian3d::prelude::Collider) -> parry3d::bounding_volume::Aabb {
         collider.shape_scaled().compute_local_aabb()
     }
 }

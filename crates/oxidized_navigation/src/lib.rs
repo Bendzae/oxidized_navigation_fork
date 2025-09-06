@@ -827,6 +827,7 @@ fn get_geometry_type(collider: TypedShape) -> GeometryResult {
         TypedShape::Polyline(_) => GeometryResult::Unsupported,  /* This is a line. */
         TypedShape::Segment(_) => GeometryResult::Unsupported,   /* This is a line segment. */
         TypedShape::Custom(_) => GeometryResult::Unsupported,
+        TypedShape::Voxels(_) => GeometryResult::Unsupported, /* Voxel grids are not suitable for navigation mesh generation. */
     }
 }
 

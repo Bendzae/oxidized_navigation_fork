@@ -39,8 +39,10 @@ name = "rapier3d"
 oxidized_navigation = { path = "../oxidized_navigation", version = "0.13" }
 bevy = { version = "0.16", default-features = false }
 
-bevy_rapier3d = { version = "0.30", default-features = false, features = ["dim3"] }
-parry3d = { version = "0.17" }
+bevy_rapier3d = { version = "0.31", default-features = false, features = [
+    "dim3",
+] }
+parry3d = { version = "0.22.1" }
 
 [dev-dependencies]
 bevy = { version = "0.16", default-features = false, features = [
