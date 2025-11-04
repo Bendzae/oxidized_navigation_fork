@@ -141,7 +141,7 @@ impl<C: OxidizedCollider> Plugin for OxidizedNavigationPlugin<C> {
             )
                 .chain()
                 // Configure our systems to run before physics engines.
-                .in_set(RunFixedMainLoopSystem::BeforeFixedMainLoop),
+                .in_set(RunFixedMainLoopSystems::BeforeFixedMainLoop),
         );
 
         app.add_systems(
@@ -164,7 +164,7 @@ impl<C: OxidizedCollider> Plugin for OxidizedNavigationPlugin<C> {
         app.register_type::<NavMeshAffector>()
             .register_type::<NavMeshAreaType>();
 
-        app.add_event::<TileGenerated>();
+        app.add_message::<TileGenerated>();
     }
 }
 
@@ -827,18 +827,19 @@ fn get_geometry_type(collider: TypedShape) -> GeometryResult {
         TypedShape::Polyline(_) => GeometryResult::Unsupported,  /* This is a line. */
         TypedShape::Segment(_) => GeometryResult::Unsupported,   /* This is a line segment. */
         TypedShape::Custom(_) => GeometryResult::Unsupported,
+        TypedShape::Voxels(_) => GeometryResult::Unsupported,    /* Voxels are not supported for nav-mesh generation. */
     }
 }
 
 /// Event containing the tile coordinate of a generated/regenerated tile.
 ///
 /// Emitted when a tile has been updated.
-#[derive(Event)]
+#[derive(Message)]
 pub struct TileGenerated(pub UVec2);
 
 fn remove_finished_tasks(
     mut active_generation_tasks: ResMut<ActiveGenerationTasks>,
-    mut event: EventWriter<TileGenerated>,
+    mut event: MessageWriter<TileGenerated>,
 ) {
     active_generation_tasks.0.retain_mut(|task| {
         if let Some(tile) = future::block_on(future::poll_once(task)) {
